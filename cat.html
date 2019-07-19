@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>圈小猫</title>
+  </head>
+  <body style="background-color:#d9d9d9">
+    <canvas id="myCanvas" width="550px" height="550px" style="margin-left: 200px;"></canvas>
+  </body>
+  <script type="text/javascript">
+    //初始化时，先画出初始样子
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d"); 
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, 550, 550); 
+    for (let j = 1; j <= 11; j++) {
+      if (j%2==0){
+        k = 22;
+      }else{
+        k=0;
+      }
+      for (let i = 1; i <= 11; i++) {
+        ctx.beginPath();
+        ctx.arc(43 * i+k, 41*j, 20, 0, 2 * Math.PI);
+        ctx.fillStyle="#b3d9ff";
+        ctx.fill();
+        ctx.stroke();
+      }
+      
+    }
+
+    //初始化上色数组
+    var corarr = new Array(121);
+    for(let i=0;i<121;i++){
+      corarr[i] = "#b3d9ff";
+    }
+
+    //canvas单击事件
+    c.addEventListener('click', function (e) {
+      //获取鼠标点击的角标
+      var x = e.offsetX;
+      var y = e.offsetY;
+      // alert(x);
+      // alert(y);
+      x = x-23;
+      y = y-20;
+      y = Math.floor(y / 41);
+      if (y%2!=0) {
+        x=x-22;
+      }
+      x=Math.floor(x/42) ;
+
+      //判断已经变色了，直接返回
+      if (corarr[x+y*11]=="#ffffff") {
+        return;
+      }
+
+      //开始给圆上色
+      corarr[x+y*11] = "#ffffff";
+      let count = 0;
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 550, 550);
+      for (let j = 1; j <= 11; j++) {
+        if (j % 2 == 0) {
+          k = 22;
+        } else {
+          k = 0;
+        }
+        for (let i = 1; i <= 11; i++) {
+          ctx.beginPath();
+          ctx.arc(43 * i + k, 41 * j, 20, 0, 2 * Math.PI);
+          ctx.fillStyle = corarr[count++];
+          ctx.fill();
+          ctx.stroke();
+        }
+
+      }
+    });
+
+
+    
+  </script>
+</html>
