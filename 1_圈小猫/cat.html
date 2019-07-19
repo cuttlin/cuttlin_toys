@@ -9,19 +9,19 @@
   <script type="text/javascript">
   //获取小猫下一步的角标
   function nextstep(c,f) {
-    if(c<11||c>109||c%11==0||(c-1)%11==0){//小猫跑掉啦！
+    if(c<11||c>109||c%11==0||(c+1)%11==0){//小猫跑掉啦！
       return -1;
     }
     let temparr = new Array();
     let zed = Math.round(Math.random()*5);
-    if (f==1) {//单数行
+    if (f==0) {//偶数行
       temparr[0] = c-11-1;
       temparr[1] = c-11;
       temparr[2] = c-1;
       temparr[3] = c+1;
       temparr[4] = c+11;
       temparr[5] = c + 11-1;
-    }else{//偶数行
+    }else{//奇数行
       temparr[0] = c - 11 + 1;
       temparr[1] = c - 11;
       temparr[2] = c - 1;
@@ -29,18 +29,21 @@
       temparr[4] = c + 11;
       temparr[5] = c + 11 + 1;
     }
-    // alert(c);
-    // alert(temparr[zed]);
     return temparr[zed];
   }
   
-  
+  //判断是否胜利(小猫出不来)
+  function isvictory(c) {
+    
+  }
   
   
   //初始化上色数组
   var corarr = new Array(120);
+  var numarr = new Array(120);//权重数组
   for (let i = 0; i < 121; i++) {
     corarr[i] = "#b3d9ff";
+    numarr[i] = 1;
   }
   var cat = 60, num = 0; //小猫暂时是中心的位置
     corarr[cat] = "#000000";
@@ -81,18 +84,16 @@
       x = x-23;
       y = y-20;
       y = Math.floor(y / 41);
-      let rowflag = 0;
+      
       if (y%2!=0) {  //单行
         if (x+23<45) {
           return;
         }
-        x=x-22;   
-        rowflag = 1;   
+        x=x-22;      
       }else{
         if(x+23>495){//双行
           return;
         }
-        rowflag = 0;
       }
       x=Math.floor(x/43) ;
 
@@ -104,15 +105,18 @@
       
       //给新圆上色
       corarr[x+y*11] = "#003366";
-      
+      let rowflag = Math.floor(cat/11)%2;//获取小猫的奇偶行
       //计算小猫
       let tcat = 0;
       corarr[cat] = "#b3d9ff";
       tcat = nextstep(cat, rowflag);//获取小猫下一步的角标
+      if(tcat==-1){alert("小猫逃走了！");return;}
       while (corarr[tcat] != "#b3d9ff") {//猫不可以走到圈上
         tcat = nextstep(cat, rowflag);
+        if (tcat == -1) { alert("小猫逃走了！"); return; }
       }
       cat = tcat;
+      numarr[x+y*11] = 120;
 
       //开始重新绘制
       corarr[cat] = "#000000";
